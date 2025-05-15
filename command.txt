@@ -1,0 +1,9 @@
+mtr -jzb -o "LDRSNBAWVGJMXI" -c 20 1.1.1.1 8.8.8.8 34.36.217.158 104.129.164.157 52.223.34.110 167.82.47.247 23.11.39.92
+
+cloudflare DNS
+Google DNS
+Google
+Cloudflare
+Amazon
+Fastly
+Akamei
