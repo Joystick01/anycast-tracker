@@ -23,9 +23,10 @@ regex = re.compile(r"\s{2,}", re.MULTILINE)
 
 #def start():
 timestamp = datetime.now(timezone.utc).isoformat()
-result_v4 = subprocess.run(["mtr", "-jzb", "-o", "LDRSNBAWVGJMXI", "-c", "1", "1.1.1.1", "8.8.8.8"], stdout=subprocess.PIPE)
+# Cloudflare DNS, Google DNS, Quad9 DNS, Akamai CDN, Cloudflare CDN
+result_v4 = subprocess.run(["mtr", "-jzb", "-o", "LDRSNBAWVGJMXI", "-c", "20", "1.1.1.1", "8.8.8.8", "9.9.9.9", "2.16.241.219", "104.16.123.96"], stdout=subprocess.PIPE)
 print("Retrieved IPv4 data")
-result_v6 = subprocess.run(["mtr", "-jzb", "-o", "LDRSNBAWVGJMXI", "-c", "1", "2606:4700:4700::1111", "2001:4860:4860::8888"], stdout=subprocess.PIPE)
+result_v6 = subprocess.run(["mtr", "-jzb", "-o", "LDRSNBAWVGJMXI", "-c", "20", "2606:4700:4700::1111", "2001:4860:4860::8888", "2620:fe::fe:9", "2a02:26f0:3500:1b::1724:a393", "2606:4700::6810:7b60"], stdout=subprocess.PIPE)
 print("Retrieved IPv6 data")
 json_arr_v4 = json.loads('[' + re.sub(regex, ' ', result_v4.stdout.decode('utf-8')).replace('\n', '').replace('}{', '},{')+']')
 print("Parsed IPv4 data")
