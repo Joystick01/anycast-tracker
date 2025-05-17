@@ -1,0 +1,10 @@
+services:
+  app:
+    image: anycast-tracker
+    pull_policy: build
+    build:
+      context: app
+      dockerfile: ../infrastructure/container/Dockerfile
+    env_file:
+      - app/.env
+    network_mode: host

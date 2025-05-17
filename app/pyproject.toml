@@ -9,12 +9,11 @@ dependencies = [
     "azure-identity (>=1.23.0,<2.0.0)"
 ]
 
-[project.scripts]
-start = "anycast_tracker:main"
-
 [tool.poetry]
 packages = [{include = "anycast_tracker", from = "src"}]
 
+[project.scripts]
+start = "anycast_tracker.__main__:main"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
