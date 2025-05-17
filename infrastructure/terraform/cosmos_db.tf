@@ -21,13 +21,22 @@ resource "azurerm_cosmosdb_sql_database" "cosmosdb_sql_database" {
   throughput          = 400
 }
 
-resource "azurerm_cosmosdb_sql_container" "cosmosdb_sql_container" {
-  name                = "${var.project_name}-cosmosdb-sql-container"
+resource "azurerm_cosmosdb_sql_container" "ipv4_cosmosdb_sql_container" {
+  name                = "ipv4-${var.project_name}-cosmosdb-sql-container"
   resource_group_name = azurerm_resource_group.rg.name
   account_name        = azurerm_cosmosdb_account.cosmosdb_account.name
   database_name       = azurerm_cosmosdb_sql_database.cosmosdb_sql_database.name
   partition_key_paths  = ["/utctime", "/region"]
   partition_key_kind = "MultiHash"
   partition_key_version = 2
-  throughput          = 400
+}
+
+resource "azurerm_cosmosdb_sql_container" "ipv6_cosmosdb_sql_container" {
+  name                = "ipv6-${var.project_name}-cosmosdb-sql-container"
+  resource_group_name = azurerm_resource_group.rg.name
+  account_name        = azurerm_cosmosdb_account.cosmosdb_account.name
+  database_name       = azurerm_cosmosdb_sql_database.cosmosdb_sql_database.name
+  partition_key_paths  = ["/utctime", "/region"]
+  partition_key_kind = "MultiHash"
+  partition_key_version = 2
 }
