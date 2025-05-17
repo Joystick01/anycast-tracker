@@ -1,6 +1,7 @@
 resource "azurerm_container_app_environment" "container_app_environment" {
-    name                = "${var.project_name}-container-app-env"
-    location            = azurerm_resource_group.rg.location
+    for_each = var.locations
+    name                = "${var.project_name}-container-app-env-${each.key}"
+    location            = each.value
     resource_group_name = azurerm_resource_group.rg.name
     logs_destination = "azure-monitor"
 }
@@ -10,8 +11,8 @@ resource "azurerm_container_app_job" "container_app_job" {
     name                = "${var.project_name}-job-${each.key}"
     location            = each.value
     resource_group_name = azurerm_resource_group.rg.name
-    container_app_environment_id = azurerm_container_app_environment.container_app_environment.id
-    replica_timeout_in_seconds = 300
+    container_app_environment_id = azurerm_container_app_environment.container_app_environment[each.key].id
+    replica_timeout_in_seconds = 600
     template {
       container {
         name   = "${var.project_name}-container-${each.key}"
