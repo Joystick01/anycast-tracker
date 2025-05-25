@@ -28,6 +28,12 @@ RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR;
 
 FROM base AS runtime
 
+ENV AWS_ACCESS_KEY_ID=fill_me_in \
+    AWS_SECRET_ACCESS_KEY=fill_me_in \
+    AWS_DEFAULT_REGION=fill_me_in \
+    DYNAMO_DYNAMODB_TABLE_V4=fill_me_in \
+    DYNAMO_DYNAMODB_TABLE_V6=fill_me_in
+
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 COPY src ./src
