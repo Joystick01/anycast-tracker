@@ -1,9 +1,9 @@
 output "AWS_ACCESS_KEY_ID" {
-  value = aws_iam_access_key.iam_access_key.id
+  value = aws_iam_access_key.iam_access_key_dynamodb.id
 }
 
 output "AWS_SECRET_ACCESS_KEY" {
-  value     = nonsensitive(aws_iam_access_key.iam_access_key.secret)
+  value     = nonsensitive(aws_iam_access_key.iam_access_key_dynamodb.secret)
 }
 
 output "AWS_DEFAULT_REGION" {
