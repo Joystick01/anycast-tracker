@@ -3,14 +3,14 @@ resource "aws_dynamodb_table" "aws_dynamodb_table_v4" {
   billing_mode = "PROVISIONED"
   read_capacity = 12
   write_capacity = 12
-  hash_key = "utctime"
-  range_key = "region"
+  hash_key = "id"
+  range_key = "utctime"
   attribute {
-    name = "utctime"
+    name = "id"
     type = "S"
   }
   attribute {
-    name = "region"
+    name = "utctime"
     type = "S"
   }
 }
@@ -20,14 +20,14 @@ resource "aws_dynamodb_table" "aws_dynamodb_table_v6" {
   billing_mode = "PROVISIONED"
   read_capacity = 12
   write_capacity = 12
-  hash_key = "utctime"
-  range_key = "region"
+  hash_key = "id"
+  range_key = "utctime"
   attribute {
-    name = "utctime"
+    name = "id"
     type = "S"
   }
   attribute {
-    name = "region"
+    name = "utctime"
     type = "S"
   }
 }

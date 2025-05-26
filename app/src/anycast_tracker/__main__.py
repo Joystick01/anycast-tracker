@@ -25,6 +25,7 @@ json_arr_v6 = json.loads('[' + re.sub(regex, ' ', result_v6.stdout.decode('utf-8
 print("Parsed IPv6 data")
 for obj in json_arr_v4:
     out = obj["report"]["mtr"]
+    out["id"] = str(uuid.uuid4())
     out["utctime"] = timestamp
     out["region"] = REGION
     out["hubs"] = obj["report"]["hubs"]
@@ -34,6 +35,7 @@ for obj in json_arr_v4:
     print("Inserted ipv4 data into Cosmos DB")
 for obj in json_arr_v6:
     out = obj["report"]["mtr"]
+    out["id"] = str(uuid.uuid4())
     out["utctime"] = timestamp
     out["region"] = REGION
     out["hubs"] = obj["report"]["hubs"]

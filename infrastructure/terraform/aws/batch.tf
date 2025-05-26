@@ -7,16 +7,46 @@ resource "aws_vpc" "aws_vpc" {
   enable_dns_hostnames = true
 }
 
+resource "aws_internet_gateway" "aws_internet_gateway" {
+  for_each = var.locations
+  region = each.key
+  vpc_id = aws_vpc.aws_vpc[each.key].id
+}
+
 resource "aws_subnet" "aws_subnet" {
   for_each = var.locations
   region = each.key
   vpc_id = aws_vpc.aws_vpc[each.key].id
+  cidr_block = "10.0.0.0/24"
+  ipv6_cidr_block = aws_vpc.aws_vpc[each.key].ipv6_cidr_block
   assign_ipv6_address_on_creation = true
   map_public_ip_on_launch = true
   enable_resource_name_dns_a_record_on_launch = true
   enable_resource_name_dns_aaaa_record_on_launch = true
-  cidr_block = "10.0.0.0/24"
-  ipv6_cidr_block = aws_vpc.aws_vpc[each.key].ipv6_cidr_block
+}
+
+resource "aws_route_table" "aws_route_table" {
+  for_each = var.locations
+  region = each.key
+  vpc_id = aws_vpc.aws_vpc[each.key].id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.aws_internet_gateway[each.key].id
+  }
+
+  route {
+    ipv6_cidr_block = "::/0"
+    gateway_id = aws_internet_gateway.aws_internet_gateway[each.key].id
+  }
+  
+}
+
+resource "aws_route_table_association" "aws_route_table_association" {
+  for_each = var.locations
+  region = each.key
+  subnet_id = aws_subnet.aws_subnet[each.key].id
+  route_table_id = aws_route_table.aws_route_table[each.key].id
 }
 
 resource "aws_security_group" "aws_security_group" {
@@ -138,8 +168,8 @@ resource "aws_batch_job_definition" "aws_batch_job_definition" {
     ],
     executionRoleArn = aws_iam_role.iam_role_batch_execution.arn,
     image = "ghcr.io/joystick01/anycast-tracker:main",
-    network_configuration = {
-      assign_public_ip = "ENABLED"
+    networkConfiguration  = {
+       assignPublicIp = "ENABLED"
     }
     resourceRequirements = [
       {
@@ -151,16 +181,19 @@ resource "aws_batch_job_definition" "aws_batch_job_definition" {
         value = "512"
       }
     ],
-    runtime_platform = {
-      cpuArchitecture = "ARM64"
+     runtimePlatform  = {
+      cpuArchitecture = "X86_64"
       operatingSystemFamily = "LINUX"
     },
     logConfiguration = {
       logDriver = "awslogs"
       options = {
-        "awslogs-group"         = "/ecs/anycast-tracker"
-        "awslogs-region"        = each.key
-        "awslogs-stream-prefix" = "ecs"
+        "awslogs-create-group": "true",
+#        "awslogs-group"         = aws_cloudwatch_log_group.aws_cloudwatch_log_group[each.key].name
+        "awslogs-group"         = aws_cloudwatch_log_group.aws_cloudwatch_log_group.name
+#        "awslogs-region"        = each.key
+        "awslogs-region"        = aws_cloudwatch_log_group.aws_cloudwatch_log_group.region
+        "awslogs-stream-prefix" = "${each.key}-batch"
       }
     }
   })
@@ -177,4 +210,11 @@ resource "aws_batch_job_definition" "aws_batch_job_definition" {
     attempt_duration_seconds = 600
   }
   
+}
+
+resource "aws_cloudwatch_log_group" "aws_cloudwatch_log_group" {
+#  for_each = var.locations
+  name = "${var.project_name}-log-group"
+#  region = each.key
+  retention_in_days = 3
 }
