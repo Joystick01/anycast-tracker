@@ -69,7 +69,7 @@ resource "aws_batch_job_definition" "aws_batch_job_definition" {
       },
       {
         name  = "AWS_DEFAULT_REGION"
-        value = each.key
+        value = aws_dynamodb_table.aws_dynamodb_table_v4.region
       },
       {
         name  = "DYNAMODB_TABLE_V4"
@@ -78,6 +78,10 @@ resource "aws_batch_job_definition" "aws_batch_job_definition" {
       {
         name  = "DYNAMODB_TABLE_V6"
         value = aws_dynamodb_table.aws_dynamodb_table_v6.name
+      },
+      {
+        name  = "CONTAINER_REGION"
+        value = each.key
       }
     ],
     executionRoleArn = aws_iam_role.iam_role_batch_execution.arn,

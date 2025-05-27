@@ -6,7 +6,7 @@ from decimal import Decimal
 dynamodb = boto3.resource('dynamodb')
 table_v4 = dynamodb.Table(os.environ['DYNAMODB_TABLE_V4'])
 table_v6 = dynamodb.Table(os.environ['DYNAMODB_TABLE_V6'])
-REGION = os.environ['AWS_DEFAULT_REGION']
+REGION = os.environ['CONTAINER_REGION']
 
 print("connected to DynamoDB")
 
