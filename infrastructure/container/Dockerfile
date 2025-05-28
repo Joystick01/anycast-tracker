@@ -32,7 +32,9 @@ ENV AWS_ACCESS_KEY_ID=fill_me_in \
     AWS_SECRET_ACCESS_KEY=fill_me_in \
     AWS_DEFAULT_REGION=fill_me_in \
     DYNAMO_DYNAMODB_TABLE_V4=fill_me_in \
-    DYNAMO_DYNAMODB_TABLE_V6=fill_me_in
+    DYNAMO_DYNAMODB_TABLE_V6=fill_me_in \
+    CONTAINER_REGION=fill_me_in \
+    COUNT=5
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 

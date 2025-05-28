@@ -60,7 +60,7 @@ resource "aws_scheduler_schedule" "batch_schedule" {
   flexible_time_window {
     mode = "OFF"
   }
-  schedule_expression = "rate(1 hour)"
+  schedule_expression = "cron(0/15 * * * ? *)" # Every 15 minutes
     target {
     arn = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
     role_arn = aws_iam_role.scheduler-batch-role.arn
